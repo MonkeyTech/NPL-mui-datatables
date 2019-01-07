@@ -47,7 +47,7 @@ class TableBody extends React.Component {
   buildRows() {
     const { data, page, rowsPerPage, count } = this.props;
 
-    if (this.props.options.serverSide) return data;
+    if (this.props.options.serverSide) return data.length ? data : null;
 
     let rows = [];
     const totalPages = Math.floor(count / rowsPerPage);
@@ -92,6 +92,14 @@ class TableBody extends React.Component {
     return expandedRows.lookup && expandedRows.lookup[dataIndex] ? true : false;
   }
 
+  isRowSelectable(dataIndex) {
+    const { options } = this.props;
+    if (options.isRowSelectable) {
+      return options.isRowSelectable(dataIndex);
+    }
+    return true;
+  }
+
   handleRowSelect = data => {
     this.props.selectRowUpdate('cell', data);
   };
@@ -126,6 +134,7 @@ class TableBody extends React.Component {
                     checked={this.isRowSelected(dataIndex)}
                     isExpandable={options.expandableRows}
                     isRowExpanded={this.isRowExpanded(dataIndex)}
+                    isRowSelectable={this.isRowSelectable(dataIndex)}
                   />
                 )}
                 {row.map(
@@ -156,7 +165,7 @@ class TableBody extends React.Component {
               options={options}
               colIndex={0}
               rowIndex={0}>
-              <Typography variant="subheading" className={classes.emptyTitle}>
+              <Typography variant="subtitle1" className={classes.emptyTitle}>
                 {options.textLabels.body.noMatch}
               </Typography>
             </TableBodyCell>
