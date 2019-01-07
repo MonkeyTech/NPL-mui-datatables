@@ -105,6 +105,8 @@ class MUIDataTable extends React.Component {
         filename: PropTypes.string,
         separator: PropTypes.string,
       }),
+      customToolbarLeft: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
+      customToolbarSelectLeft: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
     }),
     /** Pass and use className to style MUIDataTable as desired */
     className: PropTypes.string,

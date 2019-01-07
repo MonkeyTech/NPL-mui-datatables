@@ -12,17 +12,19 @@ import DownloadIcon from '@material-ui/icons/CloudDownload';
 import PrintIcon from '@material-ui/icons/Print';
 import ViewColumnIcon from '@material-ui/icons/ViewColumn';
 import FilterIcon from '@material-ui/icons/FilterList';
+import AddIcon from '@material-ui/icons/Add';
 import ReactToPrint from 'react-to-print';
 import styled from '../styled';
 import { createCSVDownload } from '../utils';
+import { Fab } from '@material-ui/core';
 
 export const defaultToolbarStyles = (theme, props) => ({
   root: {},
   left: {
-    flex: '1 1 55%',
+    flex: '1 1 25%',
   },
   actions: {
-    flex: '0 0 45%',
+    flex: '0 0 75%',
     textAlign: 'right',
   },
   titleRoot: {},
@@ -145,11 +147,12 @@ class TableToolbar extends React.Component {
           {showSearch === true ? (
             <TableSearch onSearch={searchTextUpdate} onHide={this.hideSearch} options={options} />
           ) : (
-            <div className={classes.titleRoot} aria-hidden={'true'}>
-              <Typography variant="h6" className={classes.titleText}>
-                {title}
-              </Typography>
-            </div>
+            options.customToolbarLeft && options.customToolbarLeft()
+            // <div className={classes.titleRoot} aria-hidden={'true'}>
+            //   <Typography variant="h6" className={classes.titleText}>
+            //     {title}
+            //   </Typography>
+            // </div>
           )}
         </div>
         <div className={classes.actions}>

@@ -121,6 +121,7 @@ class TableBody extends React.Component {
                       index: this.getRowIndex(rowIndex),
                       dataIndex: dataIndex,
                     })}
+                    onClick={e => e.stopPropagation()}
                     fixedHeader={options.fixedHeader}
                     checked={this.isRowSelected(dataIndex)}
                     isExpandable={options.expandableRows}

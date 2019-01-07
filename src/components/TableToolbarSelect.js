@@ -68,11 +68,9 @@ class TableToolbarSelect extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <div>
-          <Typography variant="subtitle1" className={classes.title}>
-            {selectedRows.data.length} {textLabels.text}
-          </Typography>
-        </div>
+        {options.customToolbarSelectLeft &&
+          options.customToolbarSelectLeft(selectedRows, displayData, this.handleCustomSelectedRows)}
+
         {options.customToolbarSelect ? (
           options.customToolbarSelect(selectedRows, displayData, this.handleCustomSelectedRows)
         ) : (
