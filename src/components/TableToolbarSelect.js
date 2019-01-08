@@ -9,13 +9,14 @@ import { withStyles } from '@material-ui/core/styles';
 
 const defaultToolbarSelectStyles = {
   root: {
-    backgroundColor: '#f7f7f7',
+    backgroundColor: '#1976d2',
     flex: '1 1 100%',
     display: 'flex',
     height: '64px',
     position: 'relative',
     zIndex: 120,
     justifyContent: 'space-between',
+    borderRadius: '4px 4px 0 0',
   },
   title: {
     paddingLeft: '26px',
@@ -31,7 +32,7 @@ const defaultToolbarSelectStyles = {
     transform: 'translateY(-50%)',
   },
   deleteIcon: {
-    color: '#000',
+    color: '#fff',
   },
 };
 
