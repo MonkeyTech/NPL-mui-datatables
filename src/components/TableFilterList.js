@@ -26,18 +26,22 @@ class TableFilterList extends React.Component {
   };
 
   render() {
-    const { classes, filterList, filterUpdate } = this.props;
-
+    const { columns, classes, filterList, filterUpdate } = this.props;
+    console.log('TableFilterList columns :', columns);
+    console.log('TableFilterList filterList :', filterList);
     return (
       <div className={classes.root}>
         {filterList.map((item, index) =>
           item.map((data, colIndex) => (
-            <Chip
-              label={data}
-              key={colIndex}
-              onDelete={filterUpdate.bind(null, index, data, 'checkbox')}
-              className={classes.chip}
-            />
+            <div className={`${columns[index].label} filter-chip-wrap`}>
+              <div className="chip-label">{columns[index].label}</div>
+              <Chip
+                label={data}
+                key={colIndex}
+                onDelete={filterUpdate.bind(null, index, data, 'checkbox')}
+                className={classes.chip}
+              />
+            </div>
           )),
         )}
       </div>

@@ -448,13 +448,13 @@ class MUIDataTable extends React.Component {
 
       const filterVal = filterList[index];
       const { filterType, caseSensitive } = this.options;
-      if (filterVal.length) {
-        if (filterType === 'textField' && !this.hasSearchText(columnVal, filterVal, caseSensitive)) {
-          isFiltered = true;
-        } else if (filterType !== 'textField' && filterVal.indexOf(columnValue) < 0) {
-          isFiltered = true;
-        }
-      }
+      // if (filterVal.length) {
+      //   if (filterType === 'textField' && !this.hasSearchText(columnVal, filterVal, caseSensitive)) {
+      //     // isFiltered = true;
+      //   } else if (filterType !== 'textField' && filterVal.indexOf(columnValue) < 0) {
+      //     // isFiltered = true;
+      //   }
+      // }
 
       if (searchText && this.hasSearchText(columnVal, searchText, caseSensitive)) {
         isSearchFound = true;
@@ -962,7 +962,7 @@ class MUIDataTable extends React.Component {
             setTableAction={this.setTableAction}
           />
         )}
-        <TableFilterList options={this.options} filterList={filterList} filterUpdate={this.filterUpdate} />
+        <TableFilterList columns={columns} filterList={filterList} filterUpdate={this.filterUpdate} />
         <div
           style={{ position: 'relative' }}
           className={this.options.responsive === 'scroll' ? classes.responsiveScroll : null}>
