@@ -133,6 +133,7 @@ class MUIDataTable extends React.Component {
     columns: [],
     filterData: [],
     filterList: [],
+    extraFilterList: [[], []],
     selectedRows: {
       data: [],
       lookup: {},
@@ -692,7 +693,8 @@ class MUIDataTable extends React.Component {
     );
   };
 
-  filterUpdate = (index, column, type) => {
+  filterUpdate = (index, column, type, name) => {
+    console.log('filterUpdate - index, column, type, name :', index, column, type, name);
     this.setState(
       prevState => {
         const filterList = cloneDeep(prevState.filterList);
@@ -719,7 +721,40 @@ class MUIDataTable extends React.Component {
       () => {
         this.setTableAction('filterChange');
         if (this.options.onFilterChange) {
-          this.options.onFilterChange(column, this.state.filterList);
+          this.options.onFilterChange(column, this.state.filterList, this.state.extraFilterList);
+        }
+      },
+    );
+  };
+
+  extraFilterUpdate = (index, filterValue, type) => {
+    console.log('extraFilterUpdate - index, filterValue, type :', index, filterValue, type);
+    this.setState(
+      prevState => {
+        const extraFilterList = cloneDeep(prevState.extraFilterList);
+
+        switch (type) {
+          case 'number':
+            extraFilterList[index] = [filterValue];
+            break;
+          case 'currency':
+            extraFilterList[index] = [filterValue * 100];
+            break;
+          case 'multiselect':
+            // filterList[index] = column === '' ? [] : column;
+            break;
+          default:
+            extraFilterList[index] = [filterValue];
+        }
+        console.log('extraFilterList :', extraFilterList);
+        return {
+          extraFilterList: extraFilterList,
+        };
+      },
+      () => {
+        this.setTableAction('extraFilterUpdate');
+        if (this.options.onExtraFilterChange) {
+          this.options.onExtraFilterChange(filterValue, this.state.extraFilterList, this.state.filterList);
         }
       },
     );
@@ -927,6 +962,7 @@ class MUIDataTable extends React.Component {
       page,
       filterData,
       filterList,
+      extraFilterList,
       selectedRows,
       expandedRows,
       searchText,
@@ -953,6 +989,7 @@ class MUIDataTable extends React.Component {
             filterData={filterData}
             filterList={filterList}
             filterUpdate={this.filterUpdate}
+            extraFilterUpdate={this.extraFilterUpdate}
             options={this.options}
             resetFilters={this.resetFilters}
             searchTextUpdate={this.searchTextUpdate}
@@ -962,7 +999,13 @@ class MUIDataTable extends React.Component {
             setTableAction={this.setTableAction}
           />
         )}
-        <TableFilterList columns={columns} filterList={filterList} filterUpdate={this.filterUpdate} />
+        <TableFilterList
+          columns={columns}
+          filterList={filterList}
+          extraFilters={this.options.extraFilters}
+          extraFilterList={extraFilterList}
+          filterUpdate={this.filterUpdate}
+        />
         <div
           style={{ position: 'relative' }}
           className={this.options.responsive === 'scroll' ? classes.responsiveScroll : null}>

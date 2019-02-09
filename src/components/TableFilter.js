@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { InputAdornment } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -13,6 +14,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
+import _ from '@lodash';
 
 export const defaultFilterStyles = {
   root: {
@@ -123,6 +125,11 @@ export const defaultFilterStyles = {
 };
 
 class TableFilter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleTextFieldChange = _.debounce(this.handleTextFieldChange, 1000);
+  }
+
   static propTypes = {
     /** Data used to populate filter dropdown/checkbox */
     filterData: PropTypes.array.isRequired,
@@ -151,9 +158,18 @@ class TableFilter extends React.Component {
     this.props.onFilterUpdate(index, column, 'multiselect');
   };
 
-  handleTextFieldChange = (event, index) => {
-    this.props.onFilterUpdate(index, event.target.value, 'textField');
+  handleTextFieldChange = (value, index) => {
+    // event. preventDefault();
+    console.log('value :', value);
+    console.log('value :', value);
+    console.log('index :', index);
+
+    this.props.onFilterUpdate(index, value, 'textField');
   };
+
+  handlerExtraFilterField = _.debounce((event, index) => {
+    this.props.onExtraFilterUpdate(index, event, 'currency');
+  }, 650);
 
   renderCheckbox(columns) {
     const { classes, filterData, filterList } = this.props;
@@ -194,7 +210,6 @@ class TableFilter extends React.Component {
   }
 
   renderSelect(column, index) {
-    console.log('renderSelect this.props :', this.props);
     const { classes, filterData, filterList, options } = this.props;
     const textLabels = options.textLabels.filter;
 
@@ -238,12 +253,30 @@ class TableFilter extends React.Component {
       <FormControl className={classes.textFieldFormControl} key={index}>
         <TextField
           label={column.label || column.name}
-          value={filterList[index].toString() || ''}
-          onChange={event => this.handleTextFieldChange(event, index)}
+          // value={filterList[index].toString() || ''}
+          defaultValue={filterList[index].toString() || ''}
+          onChange={event => this.handleTextFieldChange(event.target.value, index)}
         />
       </FormControl>
     ) : (
       false
+    );
+  }
+
+  renderExtraFilterNumberField(filter, index) {
+    const { classes, options } = this.props;
+    console.log('renderExtraFilterNumberField options :', options);
+    return (
+      <FormControl className={classes.textFieldFormControl} key={index}>
+        <TextField
+          label={filter.label || filter.name}
+          type="number"
+          defaultValue={options.extraFilters[index].filterList()}
+          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+          inputProps={{ min: 0 }}
+          onChange={event => this.handlerExtraFilterField(event.target.value, index)}
+        />
+      </FormControl>
     );
   }
 
@@ -288,6 +321,7 @@ class TableFilter extends React.Component {
     const textLabels = options.textLabels.filter;
 
     console.log('tableFilter columns :', columns);
+    console.log('tableFilter options :', options);
     return (
       <div className={classes.root}>
         <div className={classes.header}>
@@ -323,6 +357,26 @@ class TableFilter extends React.Component {
               </div>
             )),
         )}
+        {options.extraFilters &&
+          options.extraFilters.map((filter, index) =>
+            filter.filterType === 'number' ? (
+              <div className={classes.textFieldRoot} key={index}>
+                {this.renderExtraFilterNumberField(filter, index)}
+              </div>
+            ) : (
+              //: column.filterType === 'multiselect' ? (
+              //   this.renderMultiselect([column])
+              // ) : column.filterType === 'textField' ? (
+              //   <div className={classes.textFieldRoot} key={index}>
+              //     {this.renderTextField(column, index)}
+              //   </div>
+              // )
+              <div className={classes.selectRoot} key={index}>
+                !!!
+                {/* this.renderSelect(column, index)*/}
+              </div>
+            ),
+          )}
         {/*{options.filterType === 'checkbox'
           ? this.renderCheckbox(columns)
           : options.filterType === 'multiselect'

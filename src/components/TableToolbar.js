@@ -123,6 +123,7 @@ class TableToolbar extends React.Component {
   };
 
   render() {
+    console.log('TableToolbar this.props :', this.props);
     const {
       data,
       options,
@@ -131,6 +132,7 @@ class TableToolbar extends React.Component {
       filterData,
       filterList,
       filterUpdate,
+      extraFilterUpdate,
       resetFilters,
       searchTextUpdate,
       toggleViewColumn,
@@ -228,6 +230,7 @@ class TableToolbar extends React.Component {
                   filterList={filterList}
                   filterData={filterData}
                   onFilterUpdate={filterUpdate}
+                  onExtraFilterUpdate={extraFilterUpdate}
                   onFilterReset={resetFilters}
                 />
               }
