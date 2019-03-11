@@ -415,11 +415,12 @@ class MUIDataTable extends React.Component {
     let isFiltered = false;
     let isSearchFound = false;
     let displayRow = [];
-
+    // console.log('columns :', columns);
     for (let index = 0; index < row.length; index++) {
       let columnDisplay = row[index];
       let columnValue = row[index];
-
+      // console.log('index :', index);
+      // console.log('columns[index] :', columns[index]);
       if (columns[index].customBodyRender) {
         const tableMeta = this.getTableMeta(rowIndex, index, row, columns[index], this.state.data, {
           ...this.state,
@@ -694,11 +695,12 @@ class MUIDataTable extends React.Component {
   };
 
   filterUpdate = (index, column, type, name) => {
-    console.log('filterUpdate - index, column, type, name :', index, column, type, name);
+    // console.log('filterUpdate - index, column, type, name :', index, column, type, name);
     this.setState(
       prevState => {
         const filterList = cloneDeep(prevState.filterList);
         const filterPos = filterList[index].indexOf(column);
+        // console.log('filterList :', filterList);
 
         switch (type) {
           case 'checkbox':
@@ -710,7 +712,7 @@ class MUIDataTable extends React.Component {
           default:
             filterList[index] = filterPos >= 0 || column === '' ? [] : [column];
         }
-
+        console.log('filterList :', filterList);
         return {
           filterList: filterList,
           displayData: this.options.serverSide
@@ -728,7 +730,7 @@ class MUIDataTable extends React.Component {
   };
 
   extraFilterUpdate = (index, filterValue, type) => {
-    console.log('extraFilterUpdate - index, filterValue, type :', index, filterValue, type);
+    // console.log('extraFilterUpdate - index, filterValue, type :', index, filterValue, type);
     this.setState(
       prevState => {
         const extraFilterList = cloneDeep(prevState.extraFilterList);
@@ -746,7 +748,7 @@ class MUIDataTable extends React.Component {
           default:
             extraFilterList[index] = [filterValue];
         }
-        console.log('extraFilterList :', extraFilterList);
+        // console.log('extraFilterList :', extraFilterList);
         return {
           extraFilterList: extraFilterList,
         };
@@ -1005,6 +1007,7 @@ class MUIDataTable extends React.Component {
           extraFilters={this.options.extraFilters}
           extraFilterList={extraFilterList}
           filterUpdate={this.filterUpdate}
+          extraFilterUpdate={this.extraFilterUpdate}
         />
         <div
           style={{ position: 'relative' }}

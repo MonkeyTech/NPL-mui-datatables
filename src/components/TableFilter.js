@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { InputAdornment } from '@material-ui/core';
+import { InputAdornment, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -14,6 +14,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import _ from '@lodash';
 
 export const defaultFilterStyles = {
@@ -127,6 +129,7 @@ export const defaultFilterStyles = {
 class TableFilter extends React.Component {
   constructor(props) {
     super(props);
+    console.log('TableFilter props :', props);
     this.handleTextFieldChange = _.debounce(this.handleTextFieldChange, 1000);
   }
 
@@ -160,14 +163,10 @@ class TableFilter extends React.Component {
 
   handleTextFieldChange = (value, index) => {
     // event. preventDefault();
-    console.log('value :', value);
-    console.log('value :', value);
-    console.log('index :', index);
-
     this.props.onFilterUpdate(index, value, 'textField');
   };
 
-  handlerExtraFilterField = _.debounce((event, index) => {
+  handleExtraFilterField = _.debounce((event, index) => {
     this.props.onExtraFilterUpdate(index, event, 'currency');
   }, 650);
 
@@ -265,7 +264,7 @@ class TableFilter extends React.Component {
 
   renderExtraFilterNumberField(filter, index) {
     const { classes, options } = this.props;
-    console.log('renderExtraFilterNumberField options :', options);
+    // console.log('renderExtraFilterNumberField options :', options);
     return (
       <FormControl className={classes.textFieldFormControl} key={index}>
         <TextField
@@ -274,7 +273,7 @@ class TableFilter extends React.Component {
           defaultValue={options.extraFilters[index].filterList()}
           InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
           inputProps={{ min: 0 }}
-          onChange={event => this.handlerExtraFilterField(event.target.value, index)}
+          onChange={event => this.handleExtraFilterField(event.target.value, index)}
         />
       </FormControl>
     );
@@ -318,10 +317,8 @@ class TableFilter extends React.Component {
 
   render() {
     const { classes, columns, options, onFilterReset } = this.props;
+    console.log('options :', options);
     const textLabels = options.textLabels.filter;
-
-    console.log('tableFilter columns :', columns);
-    console.log('tableFilter options :', options);
     return (
       <div className={classes.root}>
         <div className={classes.header}>
@@ -340,53 +337,51 @@ class TableFilter extends React.Component {
           </div>
           <div className={classes.filtersSelected} />
         </div>
-        {columns.map(
-          (column, index) =>
-            column.filter &&
-            (column.filterType === 'checkbox' ? (
-              this.renderCheckbox([column])
-            ) : column.filterType === 'multiselect' ? (
-              this.renderMultiselect([column])
-            ) : column.filterType === 'textField' ? (
-              <div className={classes.textFieldRoot} key={index}>
-                {this.renderTextField(column, index)}
-              </div>
-            ) : (
-              <div className={classes.selectRoot} key={index}>
-                {this.renderSelect(column, index)}
-              </div>
-            )),
-        )}
-        {options.extraFilters &&
-          options.extraFilters.map((filter, index) =>
-            filter.filterType === 'number' ? (
-              <div className={classes.textFieldRoot} key={index}>
-                {this.renderExtraFilterNumberField(filter, index)}
-              </div>
-            ) : (
-              //: column.filterType === 'multiselect' ? (
-              //   this.renderMultiselect([column])
-              // ) : column.filterType === 'textField' ? (
-              //   <div className={classes.textFieldRoot} key={index}>
-              //     {this.renderTextField(column, index)}
-              //   </div>
-              // )
-              <div className={classes.selectRoot} key={index}>
-                !!!
-                {/* this.renderSelect(column, index)*/}
-              </div>
-            ),
-          )}
-        {/*{options.filterType === 'checkbox'
-          ? this.renderCheckbox(columns)
-          : options.filterType === 'multiselect'
-          ? this.renderMultiselect(columns)
-          : options.filterType === 'textField'
-          ? this.renderTextField(columns)
-            : this.renderSelect(columns)}*/}
+        {options.filterGroups.map((group, gindex) => (
+          <ExpansionPanel className="shadow-md" key={gindex}>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography className="">{group}</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className="block">
+              {columns.map(
+                (column, index) =>
+                  column.filter &&
+                  column.filterGroup == group &&
+                  (column.filterType === 'checkbox' ? (
+                    this.renderCheckbox([column])
+                  ) : column.filterType === 'multiselect' ? (
+                    this.renderMultiselect([column])
+                  ) : column.filterType === 'textField' ? (
+                    <div className={classes.textFieldRoot} key={index}>
+                      {this.renderTextField(column, index)}
+                    </div>
+                  ) : (
+                    <div className={classes.selectRoot} key={index}>
+                      {this.renderSelect(column, index)}
+                    </div>
+                  )),
+              )}
+              {options.extraFilters &&
+                options.extraFilters.map(
+                  (filter, index) =>
+                    filter.filterGroup == group &&
+                    (filter.filterType === 'number' ? (
+                      <div className={classes.textFieldRoot} key={index}>
+                        {this.renderExtraFilterNumberField(filter, index)}
+                      </div>
+                    ) : column.filterType === 'currency' ? (
+                      <div className={classes.textFieldRoot} key={index}>
+                        {this.renderExtraFilterNumberField(filter, index)}
+                      </div>
+                    ) : (
+                      <div className={classes.selectRoot} key={index} />
+                    )),
+                )}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        ))}
       </div>
     );
   }
 }
-
 export default withStyles(defaultFilterStyles, { name: 'MUIDataTableFilter' })(TableFilter);

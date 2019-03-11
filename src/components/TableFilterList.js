@@ -49,51 +49,53 @@ class TableFilterList extends React.Component {
   };
 
   render() {
-    const { columns, extraFilters, classes, filterList, extraFilterList, filterUpdate } = this.props;
-    console.log('TableFilterList columns :', columns);
-    console.log('TableFilterList filterList :', filterList);
-    console.log('TableFilterList extraFilters :', extraFilters);
+    const { columns, extraFilters, classes, filterList, extraFilterList, filterUpdate, extraFilterUpdate } = this.props;
+    console.log('filterList :', filterList);
     return (
-      <div className={classes.root}>
-        <Typography variant="h6" className={classes.filtersRowTitle}>
-          Filters
-        </Typography>
-        {filterList.map((item, index) =>
-          item.map(
-            (data, colIndex) =>
-              data && (
-                <div className={`${columns[index].label} filter-chip-wrap`}>
-                  {/* <div className="chip-label">{columns[index].label}</div> */}
-                  <Chip
-                    avatar={<span className={classes.chipLabel}>{columns[index].label}</span>}
-                    label={_.startCase(data)}
-                    key={colIndex}
-                    onDelete={filterUpdate.bind(null, index, data, 'checkbox', columns[index].name)}
-                    className={classes.chip}
-                  />
-                </div>
-              ),
-          ),
-        )}
-        {extraFilters.map((item, index) =>
-          item.filterList().map(
-            (data, colIndex) =>
-              data &&
-              data != '' && (
-                <div className={`${extraFilters[index].label} filter-chip-wrap`}>
-                  {/* <div className="chip-label">{extraFilters[index].label}</div> */}
-                  <Chip
-                    avatar={<span className={classes.chipLabel}>{extraFilters[index].label}</span>}
-                    label={`${extraFilters[index].name.indexOf('amount') >= 0 ? '$' + data / 100 : _.startCase(data)}`}
-                    key={colIndex}
-                    onDelete={filterUpdate.bind(null, index, data, 'checkbox', extraFilters[index].name)}
-                    className={classes.chip}
-                  />
-                </div>
-              ),
-          ),
-        )}
-      </div>
+      filterList.some(function(item) {
+        return item.length;
+      }) && (
+        <div className={classes.root}>
+          <Typography variant="h6" className={classes.filtersRowTitle}>
+            Filters
+          </Typography>
+          {filterList.map((item, index) =>
+            item.map(
+              (data, colIndex) =>
+                data && (
+                  <div className={`${columns[index].label} filter-chip-wrap`}>
+                    {/* <div className="chip-label">{columns[index].label}</div> */}
+                    <Chip
+                      avatar={<span className={classes.chipLabel}>{columns[index].label}</span>}
+                      label={_.startCase(data)}
+                      key={colIndex}
+                      onDelete={filterUpdate.bind(null, index, data, 'checkbox', columns[index].name)}
+                      className={classes.chip}
+                    />
+                  </div>
+                ),
+            ),
+          )}
+          {extraFilters.map((item, index) =>
+            item.filterList().map(
+              (data, colIndex) =>
+                data &&
+                data != '' && (
+                  <div className={`${extraFilters[index].label} filter-chip-wrap`}>
+                    {/* <div className="chip-label">{extraFilters[index].label}</div> */}
+                    <Chip
+                      avatar={<span className={classes.chipLabel}>{extraFilters[index].label}</span>}
+                      label={`${extraFilters[index].name.indexOf('amount') >= 0 ? '$' + data : _.startCase(data)}`}
+                      key={colIndex}
+                      onDelete={extraFilterUpdate.bind(null, index, null, 'checkbox', extraFilters[index].name)}
+                      className={classes.chip}
+                    />
+                  </div>
+                ),
+            ),
+          )}
+        </div>
+      )
     );
   }
 }
