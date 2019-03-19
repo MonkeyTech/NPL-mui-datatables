@@ -50,7 +50,7 @@ class TableFilterList extends React.Component {
 
   render() {
     const { columns, extraFilters, classes, filterList, extraFilterList, filterUpdate, extraFilterUpdate } = this.props;
-    console.log('filterList :', filterList);
+    // console.log('filterList :', filterList);
     return (
       filterList.some(function(item) {
         return item.length;

@@ -23,7 +23,7 @@ const defaultTableStyles = {
     overflowX: 'auto',
     overflow: 'auto',
     height: '100%',
-    maxHeight: '499px',
+    maxHeight: 'calc(100vh - 350px)',
   },
   caption: {
     position: 'absolute',
@@ -712,7 +712,7 @@ class MUIDataTable extends React.Component {
           default:
             filterList[index] = filterPos >= 0 || column === '' ? [] : [column];
         }
-        console.log('filterList :', filterList);
+        // console.log('filterList :', filterList);
         return {
           filterList: filterList,
           displayData: this.options.serverSide

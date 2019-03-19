@@ -102,7 +102,7 @@ export const defaultFilterStyles = {
     marginTop: '16px',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: '33%',
+    width: '50%',
     height: '80%',
     justifyContent: 'space-between',
   },
@@ -117,7 +117,7 @@ export const defaultFilterStyles = {
     marginTop: '16px',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: '33%',
+    width: '50%',
   },
   textFieldFormControl: {
     flex: '1 1 calc(50% - 24px)',
@@ -167,6 +167,10 @@ class TableFilter extends React.Component {
   };
 
   handleExtraFilterField = _.debounce((event, index) => {
+    this.props.onExtraFilterUpdate(index, event, 'number');
+  }, 650);
+
+  handleExtraFilterCurrencyField = _.debounce((event, index) => {
     this.props.onExtraFilterUpdate(index, event, 'currency');
   }, 650);
 
@@ -217,7 +221,7 @@ class TableFilter extends React.Component {
         <InputLabel htmlFor={column.name}>{column.label || column.name}</InputLabel>
         <Select
           value={filterList[index].toString() || textLabels.all}
-          name={column.name}
+          name={column.filterName || column.name}
           onChange={event => this.handleDropdownChange(event, index)}
           input={<Input name={column.name} id={column.name} />}>
           <MenuItem value={textLabels.all} key={0}>
@@ -271,9 +275,25 @@ class TableFilter extends React.Component {
           label={filter.label || filter.name}
           type="number"
           defaultValue={options.extraFilters[index].filterList()}
-          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
           inputProps={{ min: 0 }}
           onChange={event => this.handleExtraFilterField(event.target.value, index)}
+        />
+      </FormControl>
+    );
+  }
+
+  renderExtraFilterCurrencyField(filter, index) {
+    const { classes, options } = this.props;
+    // console.log('renderExtraFilterNumberField options :', options);
+    return (
+      <FormControl className={classes.textFieldFormControl} key={index}>
+        <TextField
+          label={filter.label || filter.name}
+          type="number"
+          defaultValue={options.extraFilters[index].filterList()}
+          InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+          inputProps={{ min: 0 }}
+          onChange={event => this.handleExtraFilterCurrencyField(event.target.value, index)}
         />
       </FormControl>
     );
@@ -369,9 +389,9 @@ class TableFilter extends React.Component {
                       <div className={classes.textFieldRoot} key={index}>
                         {this.renderExtraFilterNumberField(filter, index)}
                       </div>
-                    ) : column.filterType === 'currency' ? (
+                    ) : filter.filterType === 'currency' ? (
                       <div className={classes.textFieldRoot} key={index}>
-                        {this.renderExtraFilterNumberField(filter, index)}
+                        {this.renderExtraFilterCurrencyField(filter, index)}
                       </div>
                     ) : (
                       <div className={classes.selectRoot} key={index} />
