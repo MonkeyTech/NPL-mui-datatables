@@ -193,7 +193,7 @@ class TableToolbar extends React.Component {
           {options.viewColumns && (
             <Popover
               refExit={this.setActiveIcon.bind(null)}
-              container={tableRef}
+              // container={tableRef}
               trigger={
                 <IconButton
                   aria-label={viewColumns}
@@ -212,7 +212,7 @@ class TableToolbar extends React.Component {
           {options.filter && (
             <Popover
               refExit={this.setActiveIcon.bind(null)}
-              container={tableRef}
+              // container={tableRef}
               trigger={
                 <IconButton
                   aria-label={filterTable}

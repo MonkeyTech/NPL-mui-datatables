@@ -33,6 +33,7 @@ const defaultHeadCellStyles = {
     cursor: 'pointer',
     paddingLeft: '4px',
     height: '10px',
+    position: 'absolute',
   },
   sortActive: {
     color: 'rgba(0, 0, 0, 0.87)',
