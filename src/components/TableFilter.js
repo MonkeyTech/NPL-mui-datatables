@@ -129,7 +129,7 @@ export const defaultFilterStyles = {
 class TableFilter extends React.Component {
   constructor(props) {
     super(props);
-    console.log('TableFilter props :', props);
+    // console.log('TableFilter props :', props);
     this.handleTextFieldChange = _.debounce(this.handleTextFieldChange, 1000);
   }
 

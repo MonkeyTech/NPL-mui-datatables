@@ -1004,7 +1004,7 @@ class MUIDataTable extends React.Component {
         <TableFilterList
           columns={columns}
           filterList={filterList}
-          extraFilters={this.options.extraFilters}
+          extraFilters={this.options.extraFilters || []}
           extraFilterList={extraFilterList}
           filterUpdate={this.filterUpdate}
           extraFilterUpdate={this.extraFilterUpdate}

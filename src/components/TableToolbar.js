@@ -123,7 +123,7 @@ class TableToolbar extends React.Component {
   };
 
   render() {
-    console.log('TableToolbar this.props :', this.props);
+    // console.log('TableToolbar this.props :', this.props);
     const {
       data,
       options,
