@@ -23,7 +23,7 @@ const defaultTableStyles = {
     overflowX: 'auto',
     overflow: 'auto',
     height: '100%',
-    maxHeight: 'calc(100vh - 350px)',
+    maxHeight: 'calc(100vh - 290px)',
   },
   caption: {
     position: 'absolute',
