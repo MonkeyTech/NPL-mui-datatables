@@ -739,6 +739,10 @@ class MUIDataTable extends React.Component {
           case 'number':
             extraFilterList[index] = [filterValue];
             break;
+          case 'date':
+            const date = new Date(filterValue);
+            extraFilterList[index] = [filterValue];
+            break;
           case 'currency':
             extraFilterList[index] = [filterValue * 100];
             break;

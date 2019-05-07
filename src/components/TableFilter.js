@@ -170,6 +170,10 @@ class TableFilter extends React.Component {
     this.props.onExtraFilterUpdate(index, event, 'number');
   }, 650);
 
+  handleExtraFilterDateField = _.debounce((event, index) => {
+    this.props.onExtraFilterUpdate(index, event, 'date');
+  }, 650);
+
   handleExtraFilterCurrencyField = _.debounce((event, index) => {
     this.props.onExtraFilterUpdate(index, event, 'currency');
   }, 650);
@@ -277,6 +281,24 @@ class TableFilter extends React.Component {
           defaultValue={options.extraFilters[index].filterList()}
           inputProps={{ min: 0 }}
           onChange={event => this.handleExtraFilterField(event.target.value, index)}
+        />
+      </FormControl>
+    );
+  }
+
+  renderExtraFilterDateField(filter, index) {
+    const { classes, options } = this.props;
+    // console.log('renderExtraFilterNumberField options :', options);
+    return (
+      <FormControl className={classes.textFieldFormControl} key={index}>
+        <TextField
+          label={filter.label || filter.name}
+          type="date"
+          defaultValue={options.extraFilters[index].filterList()}
+          onChange={event => this.handleExtraFilterDateField(event.target.value, index)}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </FormControl>
     );
@@ -392,6 +414,10 @@ class TableFilter extends React.Component {
                     ) : filter.filterType === 'currency' ? (
                       <div className={classes.textFieldRoot} key={index}>
                         {this.renderExtraFilterCurrencyField(filter, index)}
+                      </div>
+                    ) : filter.filterType === 'date' ? (
+                      <div className={classes.textFieldRoot} key={index}>
+                        {this.renderExtraFilterDateField(filter, index)}
                       </div>
                     ) : (
                       <div className={classes.selectRoot} key={index} />
