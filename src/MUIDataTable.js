@@ -57,8 +57,8 @@ class MUIDataTable extends React.Component {
       PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.shape({
-          name: PropTypes.string.isRequired,
           label: PropTypes.string,
+          name: PropTypes.string.isRequired,
           options: PropTypes.shape({
             display: PropTypes.string, // enum('true', 'false', 'excluded')
             filter: PropTypes.bool,
@@ -109,6 +109,7 @@ class MUIDataTable extends React.Component {
         filename: PropTypes.string,
         separator: PropTypes.string,
       }),
+      onDownload: PropTypes.func,
       customToolbarLeft: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
       customToolbarSelectLeft: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
     }),

@@ -21,33 +21,50 @@ function sortCompare(order) {
     if (b.data === null) b.data = '';
     return (
       (typeof a.data.localeCompare === 'function' ? a.data.localeCompare(b.data) : a.data - b.data) *
-      (order === 'asc' ? -1 : 1)
+      (order === 'asc' ? 1 : -1)
     );
   };
 }
 
 function createCSVDownload(columns, data, options) {
-  const CSVHead =
-    columns
+  const replaceDoubleQuoteInString = columnData =>
+    typeof columnData === 'string' ? columnData.replace(/\"/g, '""') : columnData;
+
+  const buildHead = columns => {
+    return (
+      columns
+        .reduce(
+          (soFar, column) =>
+            column.download
+              ? soFar + '"' + replaceDoubleQuoteInString(column.name) + '"' + options.downloadOptions.separator
+              : soFar,
+          '',
+        )
+        .slice(0, -1) + '\r\n'
+    );
+  };
+  const CSVHead = buildHead(columns);
+
+  const buildBody = data => {
+    return data
       .reduce(
-        (soFar, column) =>
-          column.download ? soFar + '"' + column.name + '"' + options.downloadOptions.separator : soFar,
-        '',
+        (soFar, row) =>
+          soFar +
+          '"' +
+          row.data
+            .filter((_, index) => columns[index].download)
+            .map(columnData => replaceDoubleQuoteInString(columnData))
+            .join('"' + options.downloadOptions.separator + '"') +
+          '"\r\n',
+        [],
       )
-      .slice(0, -1) + '\r\n';
+      .trim();
+  };
+  const CSVBody = buildBody(data);
 
-  const CSVBody = data
-    .reduce(
-      (soFar, row) =>
-        soFar +
-        '"' +
-        row.data.filter((field, index) => columns[index].download).join('"' + options.downloadOptions.separator + '"') +
-        '"\r\n',
-      [],
-    )
-    .trim();
-
-  const csv = `${CSVHead}${CSVBody}`;
+  const csv = options.onDownload
+    ? options.onDownload(buildHead, buildBody, columns, data)
+    : `${CSVHead}${CSVBody}`.trim();
   const blob = new Blob([csv], { type: 'text/csv' });
 
   /* taken from react-csv */
