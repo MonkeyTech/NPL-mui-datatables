@@ -211,7 +211,7 @@ describe('<TableToolbar />', function() {
         setTableAction={setTableAction}
       />,
     );
-    
+
     const instance = shallowWrapper
       .dive()
       .dive()
