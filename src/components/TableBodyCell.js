@@ -9,22 +9,24 @@ const defaultBodyCellStyles = theme => ({
     display: 'none',
   },
   cellStacked: {
-    [theme.breakpoints.down('sm')]: {
+    '@media (max-width: 600px)': {
       display: 'inline-block',
       backgroundColor: '#FFF',
       fontSize: '16px',
       height: '24px',
-      width: 'calc(50% - 80px)',
+      width: '50%',
       whiteSpace: 'nowrap',
     },
   },
   responsiveStacked: {
-    [theme.breakpoints.down('sm')]: {
+    '@media (max-width: 600px)': {
       display: 'inline-block',
       fontSize: '16px',
-      width: 'calc(50% - 80px)',
+      width: '50%',
       whiteSpace: 'nowrap',
       height: '24px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
   },
 });
@@ -57,7 +59,7 @@ class TableBodyCell extends React.Component {
           {
             [classes.root]: true,
             [classes.cellHide]: true,
-            [classes.cellStacked]: options.responsive === 'stacked',
+            [classes.cellStacked]: true,
           },
           className,
         )}>
@@ -69,7 +71,7 @@ class TableBodyCell extends React.Component {
         className={classNames(
           {
             [classes.root]: true,
-            [classes.responsiveStacked]: options.responsive === 'stacked',
+            [classes.responsiveStacked]: true,
           },
           className,
         )}

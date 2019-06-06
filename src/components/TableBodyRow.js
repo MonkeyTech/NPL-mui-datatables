@@ -7,8 +7,10 @@ import { withStyles } from '@material-ui/core/styles';
 const defaultBodyRowStyles = theme => ({
   root: {},
   responsiveStacked: {
-    [theme.breakpoints.down('sm')]: {
-      border: 'solid 2px rgba(0, 0, 0, 0.15)',
+    '@media (max-width: 600px)': {
+      border: 'solid 2px rgba(0, 0, 0, 0.25)',
+      display: 'table',
+      width: '100%',
     },
   },
 });
@@ -35,7 +37,7 @@ class TableBodyRow extends React.Component {
         className={classNames(
           {
             [classes.root]: true,
-            [classes.responsiveStacked]: options.responsive === 'stacked',
+            [classes.responsiveStacked]: true,
           },
           className,
         )}

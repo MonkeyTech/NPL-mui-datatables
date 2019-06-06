@@ -31,9 +31,9 @@ const defaultHeadCellStyles = {
     display: 'inline-block',
     verticalAlign: 'top',
     cursor: 'pointer',
-    paddingLeft: '4px',
-    height: '10px',
-    position: 'absolute',
+    // paddingLeft: '4px',
+    // height: '10px',
+    // position: 'absolute',
   },
   sortActive: {
     color: 'rgba(0, 0, 0, 0.87)',

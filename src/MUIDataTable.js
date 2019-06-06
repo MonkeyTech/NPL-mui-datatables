@@ -63,6 +63,7 @@ class MUIDataTable extends React.Component {
             display: PropTypes.string, // enum('true', 'false', 'excluded')
             filter: PropTypes.bool,
             sort: PropTypes.bool,
+            sortName: PropTypes.string,
             download: PropTypes.bool,
             viewColumns: PropTypes.bool,
             filterList: PropTypes.array,

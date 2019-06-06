@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 const defaultHeadStyles = theme => ({
   main: {},
   responsiveStacked: {
-    [theme.breakpoints.down('sm')]: {
+    '@media (max-width: 600px)': {
       display: 'none',
     },
   },
@@ -37,8 +37,7 @@ class TableHead extends React.Component {
     const isChecked = numSelected === count ? true : false;
 
     return (
-      <MuiTableHead
-        className={classNames({ [classes.responsiveStacked]: options.responsive === 'stacked', [classes.main]: true })}>
+      <MuiTableHead className={classNames({ [classes.responsiveStacked]: true, [classes.main]: true })}>
         <TableHeadRow>
           {options.selectableRows && (
             <TableSelectCell
