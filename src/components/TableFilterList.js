@@ -10,7 +10,7 @@ const defaultFilterListStyles = {
     display: 'flex',
     justifyContent: 'left',
     flexWrap: 'wrap',
-    margin: '0px 16px 0px 16px',
+    margin: '0px 16px 10px 16px',
   },
   chip: {
     margin: '8px 8px 0px 0px',
@@ -35,6 +35,11 @@ const defaultFilterListStyles = {
     lineHeight: '1',
     alignContent: 'center',
     margin: '8px 0 0',
+  },
+  '@media (max-width: 600px)': {
+    root: {
+      marginBottom: '10px',
+    },
   },
 };
 
