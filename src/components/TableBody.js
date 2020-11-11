@@ -139,7 +139,7 @@ class TableBody extends React.Component {
                 )}
                 {row.map(
                   (column, columnIndex) =>
-                    columns[columnIndex].display === 'true' && (
+                    (columns[columnIndex].display === 'true' || columns[columnIndex].display === 'static') && (
                       <TableBodyCell
                         {...(columns[columnIndex].setCellProps
                           ? columns[columnIndex].setCellProps(column, dataIndex, columnIndex)

@@ -70,6 +70,7 @@ class TableViewCol extends React.Component {
           {columns.map((column, index) => {
             return (
               column.display !== 'excluded' &&
+              column.display !== 'static' &&
               column.viewColumns !== false && (
                 <FormControlLabel
                   key={index}
@@ -85,7 +86,7 @@ class TableViewCol extends React.Component {
                         checked: classes.checked,
                       }}
                       onChange={this.handleColChange.bind(null, index)}
-                      checked={column.display === 'true'}
+                      checked={column.display === 'true' || column.display === 'static'}
                       value={column.name}
                     />
                   }

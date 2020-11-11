@@ -126,6 +126,7 @@ class MUIDataTable extends React.Component {
   };
 
   state = {
+    showToolbar: true,
     announceText: null,
     activeColumn: null,
     data: [],
@@ -974,6 +975,7 @@ class MUIDataTable extends React.Component {
       selectedRows,
       expandedRows,
       searchText,
+      showToolbar,
     } = this.state;
 
     const rowCount = this.options.count || displayData.length;
@@ -991,6 +993,7 @@ class MUIDataTable extends React.Component {
           />
         ) : (
           <TableToolbar
+            show={showToolbar}
             columns={columns}
             displayData={displayData}
             data={data}

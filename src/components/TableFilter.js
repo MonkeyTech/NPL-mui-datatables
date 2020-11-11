@@ -323,14 +323,17 @@ class TableFilter extends React.Component {
 
   renderMultiselect(columns) {
     const { classes, filterData, filterList, options } = this.props;
+    const textLabels = options.textLabels.filter;
 
-    return columns.map((column, index) =>
-      column.filter ? (
+    return columns.map((column, index) => {
+      console.log('renderMultiselect column :', column);
+      return column.filter ? (
         <FormControl className={classes.selectFormControl} key={index}>
           <InputLabel htmlFor={column.name}>{column.label || column.name}</InputLabel>
           <Select
             multiple
-            value={filterList[index] || []}
+            // value={filterList[index] || []}
+            value={(filterList[index] && filterList[index]) || textLabels.all}
             renderValue={selected => selected.join(', ')}
             name={column.name}
             onChange={event => this.handleMultiselectChange(index, event.target.value)}
@@ -353,8 +356,8 @@ class TableFilter extends React.Component {
         </FormControl>
       ) : (
         false
-      ),
-    );
+      );
+    });
   }
 
   render() {

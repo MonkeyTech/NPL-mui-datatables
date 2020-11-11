@@ -53,7 +53,7 @@ class TableHead extends React.Component {
           )}
           {columns.map(
             (column, index) =>
-              column.display === 'true' &&
+              (column.display === 'true' || column.display === 'static') &&
               (column.customHeadRender ? (
                 column.customHeadRender({ index, ...column }, this.handleToggleColumn)
               ) : (
