@@ -961,7 +961,7 @@ class MUIDataTable extends React.Component {
   };
 
   render() {
-    const { classes, title } = this.props;
+    const { classes, title, selectSavedFilters, SavedFiltersActionButtons = null } = this.props;
     const {
       announceText,
       activeColumn,
@@ -1008,6 +1008,7 @@ class MUIDataTable extends React.Component {
             title={title}
             toggleViewColumn={this.toggleViewColumn}
             setTableAction={this.setTableAction}
+            selectSavedFilters={selectSavedFilters}
           />
         )}
         <TableFilterList
@@ -1017,6 +1018,7 @@ class MUIDataTable extends React.Component {
           extraFilterList={extraFilterList}
           filterUpdate={this.filterUpdate}
           extraFilterUpdate={this.extraFilterUpdate}
+          SavedFiltersActionButtons={SavedFiltersActionButtons}
         />
         <div
           style={{ position: 'relative' }}
@@ -1035,7 +1037,6 @@ class MUIDataTable extends React.Component {
               activeColumn={activeColumn}
               data={displayData}
               count={rowCount}
-              columns={columns}
               page={page}
               rowsPerPage={rowsPerPage}
               handleHeadUpdateRef={fn => (this.updateToolbarSelect = fn)}

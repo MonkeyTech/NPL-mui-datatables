@@ -21,10 +21,10 @@ import { Fab } from '@material-ui/core';
 export const defaultToolbarStyles = (theme, props) => ({
   root: {},
   left: {
-    flex: '1 1 25%',
+    flex: '1 1 50%',
   },
   actions: {
-    flex: '0 0 75%',
+    flex: '0 0 50%',
     textAlign: 'right',
   },
   titleRoot: {},
@@ -136,8 +136,6 @@ class TableToolbar extends React.Component {
       resetFilters,
       searchTextUpdate,
       toggleViewColumn,
-      title,
-      tableRef,
     } = this.props;
 
     const { search, downloadCsv, print, viewColumns, filterTable } = options.textLabels.toolbar;
@@ -212,7 +210,6 @@ class TableToolbar extends React.Component {
           {options.filter && (
             <Popover
               refExit={this.setActiveIcon.bind(null)}
-              // container={tableRef}
               trigger={
                 <IconButton
                   aria-label={filterTable}
