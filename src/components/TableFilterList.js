@@ -10,8 +10,11 @@ const defaultFilterListStyles = {
     display: 'flex',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
-    margin: '0px 16px 10px 16px',
+    margin: '0px',
+    padding: '10px 16px',
+    background: '#f1f1f1',
     alignItems: 'center',
+    boxShadow: 'inset 0px 11px 10px -10px rgba(0,0,0,0.1), inset 0px -11px 10px -10px rgba(0,0,0,0.1)',
   },
   filtersList: {
     display: 'flex',
@@ -41,7 +44,7 @@ const defaultFilterListStyles = {
     padding: '0',
     lineHeight: '1',
     alignContent: 'center',
-    margin: '8px 0 0',
+    margin: '0',
   },
   '@media (max-width: 600px)': {
     root: {
