@@ -74,9 +74,9 @@ class TableFilterList extends React.Component {
       extraFilterUpdate,
       SavedFiltersActionButtons,
     } = this.props;
-    // console.log('filterList :', filterList);
+
     return (
-      filterList.some(function(item) {
+      [...filterList, ...extraFilterList].some(function(item) {
         return item.length;
       }) && (
         <div className={classes.root}>
@@ -101,8 +101,8 @@ class TableFilterList extends React.Component {
                   ),
               ),
             )}
-            {extraFilters.map((item, index) =>
-              item.filterList().map(
+            {extraFilterList.map((item, index) =>
+              item.map(
                 (data, colIndex) =>
                   data &&
                   data != '' && (
