@@ -326,7 +326,7 @@ class TableFilter extends React.Component {
     const textLabels = options.textLabels.filter;
 
     return columns.map((column, index) => {
-      console.log('renderMultiselect column :', column);
+      // console.log('renderMultiselect column :', column);
       return column.filter ? (
         <FormControl className={classes.selectFormControl} key={index}>
           <InputLabel htmlFor={column.name}>{column.label || column.name}</InputLabel>
@@ -362,7 +362,7 @@ class TableFilter extends React.Component {
 
   render() {
     const { classes, columns, options, onFilterReset } = this.props;
-    console.log('options :', options);
+    // console.log('options :', options);
     const textLabels = options.textLabels.filter;
     return (
       <div className={classes.root}>

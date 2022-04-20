@@ -67,8 +67,7 @@ class Example extends React.Component {
       count: count,
       page: page,
       onTableChange: (action, tableState) => {
-
-        console.log(action, tableState);
+        // console.log(action, tableState);
         // a developer could react to change on an action basis or
         // examine the state as a whole and do whatever they want
 
