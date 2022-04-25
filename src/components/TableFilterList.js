@@ -18,6 +18,9 @@ const defaultFilterListStyles = {
   },
   filtersList: {
     display: 'flex',
+    maxWidth: 'calc(100% - 220px)',
+    overflow: 'auto',
+    // overflow: 'overlay',
   },
   savedFiltersButtons: {
     display: 'flex',
@@ -77,7 +80,7 @@ class TableFilterList extends React.Component {
 
     return (
       [...filterList, ...extraFilterList].some(function(item) {
-        return item.length;
+        return item && item.length && item.length > 0;
       }) && (
         <div className={classes.root}>
           <div className={classes.filtersList}>
@@ -93,7 +96,7 @@ class TableFilterList extends React.Component {
                       <Chip
                         avatar={<span className={classes.chipLabel}>{columns[index].label}</span>}
                         label={_.startCase(data)}
-                        key={colIndex}
+                        key={`filter-${colIndex}`}
                         onDelete={filterUpdate.bind(null, index, data, 'checkbox', columns[index].name)}
                         className={classes.chip}
                       />
@@ -101,24 +104,36 @@ class TableFilterList extends React.Component {
                   ),
               ),
             )}
-            {extraFilterList.map((item, index) =>
-              item.map(
-                (data, colIndex) =>
-                  data &&
-                  data != '' && (
-                    <div className={`${extraFilters[index].label} filter-chip-wrap`}>
-                      {/* <div className="chip-label">{extraFilters[index].label}</div> */}
-                      <Chip
-                        avatar={<span className={classes.chipLabel}>{extraFilters[index].label}</span>}
-                        label={`${extraFilters[index].name.indexOf('amount') >= 0 ? '$' + data : _.startCase(data)}`}
-                        key={colIndex}
-                        onDelete={extraFilterUpdate.bind(null, index, null, 'checkbox', extraFilters[index].name)}
-                        className={classes.chip}
-                      />
-                    </div>
-                  ),
-              ),
-            )}
+            {extraFilterList.map((item, index) => {
+              return (
+                item &&
+                item.map(
+                  (data, colIndex) =>
+                    data &&
+                    data != '' && (
+                      <div className={`${extraFilters[index].label} filter-chip-wrap`}>
+                        {/* <div className="chip-label">{extraFilters[index].label}</div> */}
+                        <Chip
+                          avatar={<span className={classes.chipLabel}>{extraFilters[index].label}</span>}
+                          label={`${
+                            extraFilters[index].filterType === 'currency'
+                              ? (data / 100).toLocaleString('en-US', {
+                                  style: 'currency',
+                                  currency: 'USD',
+                                  maximumFractionDigits: 0,
+                                })
+                              : _.startCase(data)
+                          }`}
+                          key={`extra-filter-${colIndex}`}
+                          // onDelete={extraFilterUpdate.bind(null, index, null, 'checkbox', extraFilters[index].name)}
+                          onDelete={() => extraFilterUpdate(index, null, 'checkbox')}
+                          className={classes.chip}
+                        />
+                      </div>
+                    ),
+                )
+              );
+            })}
           </div>
           {SavedFiltersActionButtons && <div className={classes.savedFiltersButtons}>{SavedFiltersActionButtons}</div>}
         </div>

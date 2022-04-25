@@ -159,7 +159,7 @@ class MUIDataTable extends React.Component {
   }
 
   componentWillMount() {
-    this.initializeTable(this.props);
+    this.initializeTable(this.props, true);
   }
 
   componentDidMount() {
@@ -167,8 +167,8 @@ class MUIDataTable extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data || this.props.columns !== nextProps.columns) {
-      this.initializeTable(nextProps);
+    if (!isEqual(this.props.data, nextProps.data) || !isEqual(this.props.columns, nextProps.columns)) {
+      this.initializeTable(nextProps, false);
     }
   }
 
@@ -179,10 +179,49 @@ class MUIDataTable extends React.Component {
     }
   }
 
-  initializeTable(props) {
+  initializeTable(props, initialLoad = true) {
     this.getDefaultOptions(props);
     this.setTableOptions(props);
     this.setTableData(props, TABLE_LOAD.INITIAL);
+    if (props.options && props.options.extraFilters && props.options.extraFilters.length) {
+      // const extraFilterList = cloneDeep(this.state.extraFilterList);
+      const extraFilterList = [];
+      props.options.extraFilters.forEach((filter, index) => {
+        const filterList = filter.filterList();
+        const type = filter.filterType;
+        if (filterList && filterList.length) {
+          const filterValue = filterList[0];
+          switch (type) {
+            case 'number':
+              extraFilterList[index] = [filterValue];
+              break;
+            case 'date':
+              const date = new Date(filterValue);
+              extraFilterList[index] = [filterValue];
+              break;
+            case 'currency':
+              extraFilterList[index] = [filterValue * 100];
+              break;
+            case 'multiselect':
+              // filterList[index] = column === '' ? [] : column;
+              break;
+            default:
+              extraFilterList[index] = filterValue ? [filterValue] : [];
+          }
+        }
+      });
+      this.setState(
+        prevState => {
+          // console.log('extraFilterList :', extraFilterList);
+          return {
+            extraFilterList: extraFilterList,
+          };
+        },
+        () => {
+          initialLoad && props.options.onExtraFilterChange(this.state.extraFilterList, this.state.filterList);
+        },
+      );
+    }
   }
 
   /*
@@ -732,8 +771,7 @@ class MUIDataTable extends React.Component {
     );
   };
 
-  extraFilterUpdate = (index, filterValue, type) => {
-    // console.log('extraFilterUpdate - index, filterValue, type :', index, filterValue, type);
+  extraFilterUpdate = (index, filterValue, type, skipOnExtraFilterChange = false) => {
     this.setState(
       prevState => {
         const extraFilterList = cloneDeep(prevState.extraFilterList);
@@ -761,9 +799,11 @@ class MUIDataTable extends React.Component {
         };
       },
       () => {
-        this.setTableAction('extraFilterUpdate');
-        if (this.options.onExtraFilterChange) {
-          this.options.onExtraFilterChange(filterValue, this.state.extraFilterList, this.state.filterList);
+        if (!skipOnExtraFilterChange) {
+          this.setTableAction('extraFilterUpdate');
+          if (this.options.onExtraFilterChange) {
+            this.options.onExtraFilterChange(this.state.extraFilterList, this.state.filterList);
+          }
         }
       },
     );
