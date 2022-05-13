@@ -157,8 +157,11 @@ class TableFilter extends React.Component {
     this.props.onFilterUpdate(index, value, 'dropdown');
   };
 
-  handleMultiselectChange = (index, column) => {
-    this.props.onFilterUpdate(index, column, 'multiselect');
+  handleMultiselectChange = (index, event) => {
+    console.log('👉🏼 - event.target.options', event.target.options);
+    console.log('👉🏼 - index, event', index, event);
+    const value = event.target.value;
+    this.props.onFilterUpdate(index, value, 'multiselect');
   };
 
   handleTextFieldChange = (value, index) => {
@@ -321,43 +324,42 @@ class TableFilter extends React.Component {
     );
   }
 
-  renderMultiselect(columns) {
+  renderMultiselect(column, index) {
     const { classes, filterData, filterList, options } = this.props;
+    console.log('👉🏼 - filterList[index]', filterList[index]);
+    console.log('👉🏼 - filterData[index]', filterData[index]);
     const textLabels = options.textLabels.filter;
 
-    return columns.map((column, index) => {
-      // console.log('renderMultiselect column :', column);
-      return column.filter ? (
-        <FormControl className={classes.selectFormControl} key={index}>
-          <InputLabel htmlFor={column.name}>{column.label || column.name}</InputLabel>
-          <Select
-            multiple
-            // value={filterList[index] || []}
-            value={(filterList[index] && filterList[index]) || textLabels.all}
-            renderValue={selected => selected.join(', ')}
-            name={column.name}
-            onChange={event => this.handleMultiselectChange(index, event.target.value)}
-            input={<Input name={column.name} id={column.name} />}>
-            {filterData[index].map((filterColumn, filterIndex) => (
-              <MenuItem value={filterColumn} key={filterIndex + 1}>
-                <Checkbox
-                  checked={filterList[index].indexOf(filterColumn) >= 0 ? true : false}
-                  value={filterColumn.toString()}
-                  className={classes.checkboxIcon}
-                  classes={{
-                    root: classes.checkbox,
-                    checked: classes.checked,
-                  }}
-                />
-                <ListItemText primary={filterColumn} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      ) : (
-        false
-      );
-    });
+    return column.filter ? (
+      <FormControl className={classes.selectFormControl} key={`${column.label || column.name}${index}`}>
+        <InputLabel htmlFor={column.name}>{column.label || column.name}</InputLabel>
+        <Select
+          multiple
+          value={filterList[index] || []}
+          // value={(filterList[index] && filterList[index]) || textLabels.all}
+          renderValue={selected => selected.join(', ')}
+          name={column.name}
+          onChange={event => this.handleMultiselectChange(index, event)}
+          input={<Input name={column.name} id={column.name} />}>
+          {filterData[index].map(value => (
+            <MenuItem value={value} key={value}>
+              <Checkbox
+                checked={filterList[index].indexOf(value) >= 0 ? true : false}
+                value={value.toString()}
+                className={classes.checkboxIcon}
+                classes={{
+                  root: classes.checkbox,
+                  checked: classes.checked,
+                }}
+              />
+              <ListItemText primary={value} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    ) : (
+      false
+    );
   }
 
   render() {
@@ -395,7 +397,7 @@ class TableFilter extends React.Component {
                   (column.filterType === 'checkbox' ? (
                     this.renderCheckbox([column])
                   ) : column.filterType === 'multiselect' ? (
-                    this.renderMultiselect([column])
+                    this.renderMultiselect(column, index)
                   ) : column.filterType === 'textField' ? (
                     <div className={classes.textFieldRoot} key={index}>
                       {this.renderTextField(column, index)}

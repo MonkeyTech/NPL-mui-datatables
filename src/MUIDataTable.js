@@ -749,7 +749,12 @@ class MUIDataTable extends React.Component {
             filterPos >= 0 ? filterList[index].splice(filterPos, 1) : filterList[index].push(column);
             break;
           case 'multiselect':
-            filterList[index] = column === '' ? [] : column;
+            console.log('👉🏼 - column', column);
+            console.log('👉🏼 - filterPos', filterPos);
+            // filterPos >= 0 ? filterList[index].splice(filterPos, 1) : filterList[index].push(column);
+            filterList[index] = column;
+            console.log('👉🏼 - filterList[index]', filterList[index]);
+            // filterList[index] = column === '' ? [] : [column];
             break;
           default:
             filterList[index] = filterPos >= 0 || column === '' ? [] : [column];
