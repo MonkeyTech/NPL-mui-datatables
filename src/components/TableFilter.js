@@ -158,8 +158,6 @@ class TableFilter extends React.Component {
   };
 
   handleMultiselectChange = (index, event) => {
-    console.log('👉🏼 - event.target.options', event.target.options);
-    console.log('👉🏼 - index, event', index, event);
     const value = event.target.value;
     this.props.onFilterUpdate(index, value, 'multiselect');
   };
@@ -326,8 +324,6 @@ class TableFilter extends React.Component {
 
   renderMultiselect(column, index) {
     const { classes, filterData, filterList, options } = this.props;
-    console.log('👉🏼 - filterList[index]', filterList[index]);
-    console.log('👉🏼 - filterData[index]', filterData[index]);
     const textLabels = options.textLabels.filter;
 
     return column.filter ? (
@@ -341,20 +337,30 @@ class TableFilter extends React.Component {
           name={column.name}
           onChange={event => this.handleMultiselectChange(index, event)}
           input={<Input name={column.name} id={column.name} />}>
-          {filterData[index].map(value => (
-            <MenuItem value={value} key={value}>
-              <Checkbox
-                checked={filterList[index].indexOf(value) >= 0 ? true : false}
-                value={value.toString()}
-                className={classes.checkboxIcon}
-                classes={{
-                  root: classes.checkbox,
-                  checked: classes.checked,
-                }}
-              />
-              <ListItemText primary={value} />
-            </MenuItem>
-          ))}
+          {filterData[index].map((filterColumn, filterIndex) => {
+            let label, value;
+            if (typeof filterColumn === 'object') {
+              label = filterColumn.label;
+              value = filterColumn.value;
+            } else {
+              label = filterColumn;
+              value = filterColumn;
+            }
+            return (
+              <MenuItem value={value} key={value}>
+                <Checkbox
+                  checked={filterList[index].indexOf(value) >= 0 ? true : false}
+                  value={value.toString()}
+                  className={classes.checkboxIcon}
+                  classes={{
+                    root: classes.checkbox,
+                    checked: classes.checked,
+                  }}
+                />
+                <ListItemText primary={label} />
+              </MenuItem>
+            );
+          })}
         </Select>
       </FormControl>
     ) : (
@@ -397,7 +403,9 @@ class TableFilter extends React.Component {
                   (column.filterType === 'checkbox' ? (
                     this.renderCheckbox([column])
                   ) : column.filterType === 'multiselect' ? (
-                    this.renderMultiselect(column, index)
+                    <div className={classes.selectRoot} key={index}>
+                      {this.renderMultiselect(column, index)}
+                    </div>
                   ) : column.filterType === 'textField' ? (
                     <div className={classes.textFieldRoot} key={index}>
                       {this.renderTextField(column, index)}
