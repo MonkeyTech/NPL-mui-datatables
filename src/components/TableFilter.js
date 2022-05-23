@@ -287,9 +287,25 @@ class TableFilter extends React.Component {
     );
   }
 
-  renderExtraFilterDateField(filter, index) {
+  renderExtraFilterPercentageField(filter, index) {
     const { classes, options } = this.props;
     // console.log('renderExtraFilterNumberField options :', options);
+    return (
+      <FormControl className={classes.textFieldFormControl} key={index}>
+        <TextField
+          label={filter.label || filter.name}
+          type="number"
+          defaultValue={options.extraFilters[index].filterList()}
+          InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
+          inputProps={{ min: 0 }}
+          onChange={event => this.handleExtraFilterField(event.target.value, index)}
+        />
+      </FormControl>
+    );
+  }
+
+  renderExtraFilterDateField(filter, index) {
+    const { classes, options } = this.props;
     return (
       <FormControl className={classes.textFieldFormControl} key={index}>
         <TextField
@@ -307,7 +323,6 @@ class TableFilter extends React.Component {
 
   renderExtraFilterCurrencyField(filter, index) {
     const { classes, options } = this.props;
-    // console.log('renderExtraFilterNumberField options :', options);
     return (
       <FormControl className={classes.textFieldFormControl} key={index}>
         <TextField
@@ -427,6 +442,10 @@ class TableFilter extends React.Component {
                     ) : filter.filterType === 'currency' ? (
                       <div className={classes.textFieldRoot} key={index}>
                         {this.renderExtraFilterCurrencyField(filter, index)}
+                      </div>
+                    ) : filter.filterType === 'percentage' ? (
+                      <div className={classes.textFieldRoot} key={index}>
+                        {this.renderExtraFilterPercentageField(filter, index)}
                       </div>
                     ) : filter.filterType === 'date' ? (
                       <div className={classes.textFieldRoot} key={index}>
