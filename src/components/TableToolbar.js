@@ -122,6 +122,19 @@ class TableToolbar extends React.Component {
     this.searchButton.focus();
   };
 
+  handleReset = () => {
+    this.setState({
+      iconActive: null,
+      closeFilters: true,
+    });
+    this.props.resetFilters && this.props.resetFilters();
+    setTimeout(() => {
+      this.setState(prevState => ({
+        closeFilters: null,
+      }));
+    }, 1000);
+  };
+
   render() {
     // console.log('TableToolbar this.props :', this.props);
     const {
@@ -220,6 +233,7 @@ class TableToolbar extends React.Component {
                   </Tooltip>
                 </IconButton>
               }
+              closed={this.state.closeFilters}
               content={
                 <TableFilter
                   columns={columns}
@@ -228,7 +242,7 @@ class TableToolbar extends React.Component {
                   filterData={filterData}
                   onFilterUpdate={filterUpdate}
                   onExtraFilterUpdate={extraFilterUpdate}
-                  onFilterReset={resetFilters}
+                  onFilterReset={this.handleReset}
                 />
               }
             />

@@ -45,7 +45,7 @@ class Popover extends React.Component {
   };
 
   render() {
-    const { className, placement, trigger, refExit, content, ...providedProps } = this.props;
+    const { className, placement, trigger, refExit, content, closed = null, ...providedProps } = this.props;
 
     const transformOriginSpecs = {
       vertical: 'top',
@@ -71,7 +71,7 @@ class Popover extends React.Component {
         <MuiPopover
           action={actions => (this.popoverActions = actions)}
           elevation={2}
-          open={this.state.open}
+          open={this.state.open && !closed}
           onClose={this.handleRequestClose}
           onExited={this.handleOnExit}
           anchorEl={this.anchorEl}
