@@ -17,6 +17,7 @@ const defaultSearchStyles = {
   },
   searchText: {
     flex: '0.8 0',
+    justifyContent: 'center',
   },
   clearIcon: {
     '&:hover': {
@@ -66,6 +67,7 @@ class TableSearch extends React.Component {
             onChange={this.handleTextChange}
             fullWidth={true}
             inputRef={el => (this.searchField = el)}
+            placeholder={options.searchPlaceHolder}
           />
           <IconButton className={classes.clearIcon} onClick={onHide}>
             <ClearIcon />
